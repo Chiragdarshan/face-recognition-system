@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "Smart_Attendence"
-        CONTAINER_NAME = "Smart_Attendence"
+        IMAGE_NAME = "smart_attendence"  // Use lowercase for consistency
+        CONTAINER_NAME = "smart_attendence"  // Use lowercase for consistency
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker version'  // To verify Docker is accessible
-                    sh "docker build -t smart_attendence ."
+                    sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
         }
@@ -25,13 +25,16 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // check if the container is already running and stop it if it is
+                    // Check if the container is already running and stop it if it is
                     def containerStatus = sh(script: "docker ps -q -f name=${CONTAINER_NAME}", returnStdout: true).trim()
-                    if (containerStatus)
-                    {
+                    if (containerStatus) {
                         sh "docker stop ${CONTAINER_NAME}"
                         sh "docker rm ${CONTAINER_NAME}"
                     }
+
+                    // Run the new container
+                    sh "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                }
             }
         }
     }
