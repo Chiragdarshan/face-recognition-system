@@ -25,11 +25,13 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Stop and remove existing container if any
-                    sh "docker rm -f $CONTAINER_NAME || true"
-                    // Run container
-                    sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $IMAGE_NAME"
-                }
+                    // check if the container is already running and stop it if it is
+                    def containerStatus = sh(script: "docker ps -q -f name=${CONTAINER_NAME}", returnStdout: true).trim()
+                    if (containerStatus)
+                    {
+                        sh "docker stop ${CONTAINER_NAME}"
+                        sh "docker rm ${CONTAINER_NAME}"
+                    }
             }
         }
     }
