@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker version'  // To verify Docker is accessible
-                    sh "docker build -t $IMAGE_NAME ."
+                    sh "docker build -t smart_attendence ."
                 }
             }
         }
