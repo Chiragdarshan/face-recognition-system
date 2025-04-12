@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/yourusername/your-facerecog-repo.git'
+                git 'git@github.com:Chiragdarshan/face-recognition-system.git'
             }
         }
         stage('Build Docker Image') {
