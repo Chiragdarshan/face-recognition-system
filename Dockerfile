@@ -12,8 +12,10 @@ WORKDIR /app
 COPY . /app
 
 # Install dependencies
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+
+RUN pip install --upgrade pip &&  \
+    pip install --timeout=300 -r requirements.txt
+
 
 # Expose the port Flask runs on
 EXPOSE 5000
