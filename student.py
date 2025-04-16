@@ -14,6 +14,18 @@ import sys
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import cv2
+
+# Check the OpenCV version
+print("OpenCV Version:", cv2.__version__)
+
+# Your other imports
+import tkinter as tk
+import mysql.connector
+# and so on...
+
+# Your main code here...
+
 
 # Create Flask application
 app = Flask(__name__)
@@ -639,7 +651,7 @@ class Student:
      
                             
 
-
+import tkinter as tk
 if __name__ == "__main__":
     root = tk.Tk()
     obj = Student(root)
