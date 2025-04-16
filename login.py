@@ -1,62 +1,37 @@
-from tkinter import *
-from tkinter import messagebox
-from PIL import Image, ImageTk
+from flask import Flask, render_template, request, redirect, url_for, flash
+import threading
+import webbrowser
 import subprocess
 import sys
-import os
 
-class Login_Window:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Login")
-        self.root.geometry("1530x790+0+0")
+# Create Flask application
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
-        # Background Image
-        self.bg = Image.open(r"images\login.jpg")
-        self.bg = self.bg.resize((1530, 790), Image.LANCZOS)
-        self.bg_img = ImageTk.PhotoImage(self.bg)
-        bg_lbl = Label(self.root, image=self.bg_img)
-        bg_lbl.place(x=0, y=0, relwidth=1, relheight=1)
+# Automatically open browser after server starts
+def open_browser():
+    webbrowser.open("http://127.0.0.1:5000/")
 
-        # Login Frame
-        frame = Frame(self.root, bg="white")
-        frame.place(x=600, y=200, width=350, height=400)
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        title = Label(frame, text="Admin Login", font=("times new roman", 25, "bold"), bg="white", fg="green")
-        title.place(x=90, y=30)
-
-        # Username
-        lbl_user = Label(frame, text="Username", font=("times new roman", 15, "bold"), bg="white")
-        lbl_user.place(x=30, y=100)
-        self.txtuser = Entry(frame, font=("times new roman", 15), bg="lightgray")
-        self.txtuser.place(x=30, y=130, width=270)
-
-        # Password
-        lbl_pass = Label(frame, text="Password", font=("times new roman", 15, "bold"), bg="white")
-        lbl_pass.place(x=30, y=180)
-        self.txtpass = Entry(frame, font=("times new roman", 15), show="*", bg="lightgray")
-        self.txtpass.place(x=30, y=210, width=270)
-
-        # Login Button
-        loginbtn = Button(frame, text="Login", command=self.login, font=("times new roman", 15, "bold"),
-                          bd=3, relief=RIDGE, bg="green", fg="white", activebackground="darkgreen")
-        loginbtn.place(x=110, y=270, width=120, height=40)
-
-    def login(self):
-        user = self.txtuser.get()
-        password = self.txtpass.get()
-
-        if user == "chirag" and password == "1234":
-            messagebox.showinfo("Success", "Login Successful")
-
-            # 🔁 Redirect to main.py
-            self.root.destroy()
+        if username == 'chirag' and password == '1234':
+            flash('Login Successful!', 'success')
+            # ✅ Launch student.py after login
             subprocess.Popen([sys.executable, "main.py"])
+            return redirect(url_for('home'))
         else:
-            messagebox.showerror("Error", "Invalid Username or Password")
+            flash('Invalid username or password', 'danger')
 
+    return render_template('login.html')
 
-if __name__ == "__main__":
-    root = Tk()
-    app = Login_Window(root)
-    root.mainloop()
+@app.route('/home')
+def home():
+    return "<h2>Welcome! You're logged in.</h2>"
+
+if __name__ == '__main__':
+    threading.Timer(1, open_browser).start()
+    app.run(debug=True, use_reloader=False)
