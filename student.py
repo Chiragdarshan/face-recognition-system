@@ -210,6 +210,7 @@ class Student:
 
         radiobtn2 = ttk.Radiobutton(class_student_frame,variable=self.var_radio1, text="No Photo Sample", value="N0")
         radiobtn2.grid(row=6,column=1,padx=10,pady=5,sticky=W)
+        
         # button frame
         btn_frame=Frame(class_student_frame,bd=2,relief=RIDGE,bg="white")
         btn_frame.place(x=0,y=180,width=600,height=30)
@@ -337,7 +338,7 @@ class Student:
         else:
             try:
                 conn = mysql.connector.connect(
-                    host="db",
+                    host="Localhost",
                     port=3306,
                     user="root",              
                     password="Chirag@2004",   
@@ -416,7 +417,7 @@ class Student:
                 update = messagebox.askyesno("Update", "Do you want to update this student details?", parent=self.root)  
                 if update > 0:
                     conn = mysql.connector.connect(
-                        host="db",
+                        host="Localhost",
                         port=3306,
                         username="root",
                         password="Chirag@2004",
@@ -459,7 +460,7 @@ class Student:
                 delete=messagebox.askyesno("Student Delete Page","Do you want to delete this student",parent=self.root) 
                 if delete>0: 
                     conn = mysql.connector.connect(
-                        host="db",
+                        host="Localhost",
                         port=3306,
                         username="root",
                         password="Chirag@2004",
@@ -508,7 +509,7 @@ class Student:
             student_id = self.var_id.get()  # ✅ Define student_id properly
 
             conn = mysql.connector.connect(
-                host="db",
+                host="Localhost",
                 port=3306,
                 username="root",
                 password="Chirag@2004",
