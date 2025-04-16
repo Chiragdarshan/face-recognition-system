@@ -26,5 +26,9 @@ RUN pip install --upgrade pip && \
 # Expose the port Flask runs on (if Flask app is being used in the project)
 EXPOSE 5000
 
-# Default command to run your student.py script
-CMD ["python", "student.py"]
+# Set Flask environment variables
+ENV FLASK_APP=main.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+# Default command to run Flask app
+CMD ["flask", "run"]

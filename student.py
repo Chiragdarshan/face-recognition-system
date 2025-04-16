@@ -6,6 +6,54 @@ import mysql.connector
 import cv2
 import os
 import tkinter as tk
+from flask import Flask, render_template, request, redirect, url_for, flash
+import threading
+import webbrowser
+import subprocess
+import sys
+from tkinter import *
+from tkinter import messagebox
+from PIL import Image, ImageTk
+
+# Create Flask application
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
+# Automatically open browser after server starts
+def open_browser():
+    webbrowser.open("http://127.0.0.1:5000/")
+
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == 'chirag' and password == '1234':
+            flash('Login Successful!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/home')
+def home():
+    return render_template("home.html")
+
+@app.route('/launch', methods=['POST'])
+def launch_app():
+    try:
+        # Launch the main.py script (instead of student.py)
+        subprocess.Popen([sys.executable, "main.py"], shell=True)
+        flash("Attendance system launched!", "success")
+    except Exception as e:
+        flash(f"Error launching: {e}", "danger")
+    return redirect(url_for('home'))
+
+if __name__ == '__main__':
+    threading.Timer(1, open_browser).start()
+    app.run(debug=True, use_reloader=False)
 
 
 class Student:
