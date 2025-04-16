@@ -4,6 +4,9 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 import mysql.connector
 import cv2
+import os
+import tkinter as tk
+
 
 class Student:
     def __init__(self, root):
@@ -574,18 +577,23 @@ class Student:
 
         except Exception as es:
             messagebox.showerror("Error", f"Due To: {str(es)}", parent=self.root)
-
-                    
-                              
-                    
-                
-                       
-                  
-
+    
+    
+    def is_running_in_docker():
+        path='/proc/self/cgroup'
+        if os.path.exists('/.dockerenv'):
+            return True
+        if os.path.isfile(path):
+            with open(path) as f:
+                return 'docker' in f.read()
+            return False
+        
+      
+                            
 
 
 if __name__ == "__main__":
-    root = Tk()
+    root = tk.Tk()
     obj = Student(root)
     root.mainloop()
 
