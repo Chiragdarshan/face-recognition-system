@@ -7,33 +7,20 @@ import cv2
 import os
 import tkinter as tk
 from flask import Flask, render_template, request, redirect, url_for, flash
-import threading
 import webbrowser
 import subprocess
 import sys
-from tkinter import *
-from tkinter import messagebox
-from PIL import Image, ImageTk
-import cv2
+import os
+from multiprocessing import Process
+import time
 
-# Check the OpenCV version
-print("OpenCV Version:", cv2.__version__)
-
-# Your other imports
-import tkinter as tk
-import mysql.connector
-# and so on...
-
-# Your main code here...
-
-
-# Create Flask application
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Automatically open browser after server starts
+# Automatically open browser
 def open_browser():
-    webbrowser.open("http://127.0.0.1:5000/")
+    time.sleep(1)
+    webbrowser.open("http://127.0.0.1:5000")
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -56,16 +43,17 @@ def home():
 @app.route('/launch', methods=['POST'])
 def launch_app():
     try:
-        # Launch the main.py script (instead of student.py)
-        subprocess.Popen([sys.executable, "main.py"], shell=True)
+        # Launch main.py as a separate process (Tkinter GUI)
+        subprocess.Popen([sys.executable, os.path.join(os.getcwd(), "main.py")])
         flash("Attendance system launched!", "success")
     except Exception as e:
         flash(f"Error launching: {e}", "danger")
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    threading.Timer(1, open_browser).start()
+    Process(target=open_browser).start()
     app.run(debug=True, use_reloader=False)
+
 
 
 class Student:
