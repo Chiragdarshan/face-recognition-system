@@ -138,5 +138,9 @@ def run_main_app():
 
 
 # ---------------------- Start Everything ---------------------
+from flask import Flask
+
+app = Flask(__name__)
+
 if __name__ == "__main__":
     login_page()
