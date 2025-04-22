@@ -9,7 +9,6 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                echo "📥 Cloning repository..."
                 git branch: 'main', url: 'https://github.com/Chiragdarshan/face-recognition-system.git'
             }
         }
@@ -17,10 +16,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "🐳 Checking Docker version..."
                     sh 'docker version'
-
-                    echo "🔨 Building Docker image: ${IMAGE_NAME}"
                     sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
@@ -29,5 +25,16 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    echo "🛑 Checking if container '${CONTAINER_NAME}' is already running..."
-                    def containerStatus = sh(script: "docker ps -q -f name=${CONTAINER_NAME}", returnStdout_
+                    def containerStatus = sh(script: "docker ps -q -f name=${CONTAINER_NAME}", returnStdout: true).trim()
+                    
+                    if (containerStatus) {
+                        sh "docker stop ${CONTAINER_NAME}"
+                        sh "docker rm ${CONTAINER_NAME}"
+                    }
+
+                    sh "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                }
+            }
+        }
+    }
+}
