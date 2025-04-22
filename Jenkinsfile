@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "smart_attendence"  // Use lowercase for consistency
-        CONTAINER_NAME = "smart_attendence"  // Use lowercase for consistency
+        IMAGE_NAME = "smart_attendence"
+        CONTAINER_NAME = "smart_attendence"
     }
 
     stages {
         stage('Clone Repository') {
             steps {
+                echo "📥 Cloning repository..."
                 git branch: 'main', url: 'https://github.com/Chiragdarshan/face-recognition-system.git'
             }
         }
@@ -16,7 +17,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker version'  // To verify Docker is accessible
+                    echo "🐳 Checking Docker version..."
+                    sh 'docker version'
+
+                    echo "🔨 Building Docker image: ${IMAGE_NAME}"
                     sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
@@ -25,17 +29,5 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Check if the container is already running and stop it if it is
-                    def containerStatus = sh(script: "docker ps -q -f name=${CONTAINER_NAME}", returnStdout: true).trim()
-                    if (containerStatus) {
-                        sh "docker stop ${CONTAINER_NAME}"
-                        sh "docker rm ${CONTAINER_NAME}"
-                    }
-
-                    // Run the new container
-                    sh "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
-                }
-            }
-        }
-    }
-}
+                    echo "🛑 Checking if container '${CONTAINER_NAME}' is already running..."
+                    def containerStatus = sh(script: "docker ps -q -f name=${CONTAINER_NAME}", returnStdout_
