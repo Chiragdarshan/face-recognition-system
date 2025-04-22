@@ -1,3 +1,6 @@
+# main.py
+
+from flask import Flask, render_template
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
@@ -8,7 +11,14 @@ from face_recognition import Face_Recognition
 from attendence import Attendence
 from developer import Developer
 
-# ---------------------- Main Face Recognition System ---------------------
+# -------------------- Flask App --------------------
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "<h1>Welcome to Smart Attendance System (Web Version)</h1>"
+
+# ---------------------- Tkinter GUI ----------------------
 class Face_Recognition_System:
     def __init__(self, root):
         self.root = root
@@ -37,7 +47,8 @@ class Face_Recognition_System:
         self.bg_img = Label(self.root, image=self.photoimg4)
         self.bg_img.place(x=0, y=130, width=1530, height=710)
 
-        title_lbl = Label(self.bg_img, text="SMART ATTENDENCE SYSTEM USING FACIAL RECOGNITION", font=("times new roman",24,"bold"), bg="white", fg="red")
+        title_lbl = Label(self.bg_img, text="SMART ATTENDENCE SYSTEM USING FACIAL RECOGNITION",
+                          font=("times new roman",24,"bold"), bg="white", fg="red")
         title_lbl.place(x=0, y=0, width=1530, height=50)
 
     def set_buttons(self):
@@ -56,8 +67,9 @@ class Face_Recognition_System:
             img = Image.open(f"images\\{img_name}").resize((180, 180), Image.LANCZOS)
             photoimg = ImageTk.PhotoImage(img)
             Button(self.bg_img, image=photoimg, command=cmd, cursor="hand2").place(x=x, y=y, width=180, height=180)
-            Button(self.bg_img, text=label, command=cmd, font=("times new roman",18,"bold"), bg="darkblue", fg="white", cursor="hand2").place(x=x, y=y+150, width=180, height=40)
-            setattr(self, f"photo_{img_name}", photoimg)  # To prevent garbage collection
+            Button(self.bg_img, text=label, command=cmd, font=("times new roman",18,"bold"),
+                   bg="darkblue", fg="white", cursor="hand2").place(x=x, y=y+150, width=180, height=40)
+            setattr(self, f"photo_{img_name}", photoimg)  # Prevent garbage collection
 
     def open_img(self):
         os.startfile("data")
@@ -87,14 +99,12 @@ class Face_Recognition_System:
         self.new_window = Toplevel(self.root)
         self.app = Developer(self.new_window)
 
-
-# ---------------------- Start Everything ---------------------
-def run_main_app():
+# ---------------------- Launcher ----------------------
+def run_gui():
     root = Tk()
-    obj = Face_Recognition_System(root)
+    app = Face_Recognition_System(root)
     root.mainloop()
 
 
-# ---------------------- Start Application ---------------------
 if __name__ == "__main__":
-    run_main_app()
+    run_gui()
