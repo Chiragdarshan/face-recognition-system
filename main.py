@@ -88,59 +88,13 @@ class Face_Recognition_System:
         self.app = Developer(self.new_window)
 
 
-# ---------------------- Login Window First ---------------------
-
-def login_page():
-    def validate_login():
-        username = user_entry.get()
-        password = pass_entry.get()
-        if username == "chirag" and password == "1234":
-            login_win.destroy()
-            launch_app()
-        else:
-            messagebox.showerror("Login Failed", "Invalid username or password")
-
-    login_win = Tk()
-    login_win.title("Login")
-    login_win.geometry("400x300+600+250")
-    login_win.resizable(False, False)
-
-    Label(login_win, text="Login", font=("Arial", 24, "bold")).pack(pady=20)
-    Label(login_win, text="Username", font=("Arial", 12)).pack(pady=5)
-    user_entry = Entry(login_win, font=("Arial", 12))
-    user_entry.pack()
-
-    Label(login_win, text="Password", font=("Arial", 12)).pack(pady=5)
-    pass_entry = Entry(login_win, show="*", font=("Arial", 12))
-    pass_entry.pack()
-
-    Button(login_win, text="Login", font=("Arial", 12, "bold"), bg="blue", fg="white", command=validate_login).pack(pady=20)
-
-    login_win.mainloop()
-
-
-# ---------------------- Launch After Login ---------------------
-def launch_app():
-    app_root = Tk()
-    app_root.geometry("500x300+600+250")
-    app_root.title("Start App")
-
-    Label(app_root, text="Welcome!", font=("Arial", 20, "bold")).pack(pady=30)
-    Button(app_root, text="Start Attendance App", font=("Arial", 14, "bold"), bg="green", fg="white", width=25,
-           command=lambda: [app_root.destroy(), run_main_app()]).pack(pady=20)
-
-    app_root.mainloop()
-
+# ---------------------- Start Everything ---------------------
 def run_main_app():
     root = Tk()
     obj = Face_Recognition_System(root)
     root.mainloop()
 
 
-# ---------------------- Start Everything ---------------------
-from flask import Flask
-
-app = Flask(__name__)
-
+# ---------------------- Start Application ---------------------
 if __name__ == "__main__":
-    login_page()
+    run_main_app()
